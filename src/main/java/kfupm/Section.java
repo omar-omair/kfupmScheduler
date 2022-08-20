@@ -1,6 +1,8 @@
 package kfupm;
 
-public class Section {
+import java.io.Serializable;
+
+public class Section implements Serializable{
     private String section;
     private String CRN;
     private String time;

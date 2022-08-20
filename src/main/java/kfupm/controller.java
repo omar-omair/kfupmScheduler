@@ -106,6 +106,18 @@ public class controller {
                 isDark = false;
             }
         });
+
+        Scanner scanner3 = new Scanner(new File(controller.class.getResource("colors.txt").toURI()));
+        while(scanner3.hasNextLine()) {
+            colors.add(Color.web(scanner3.nextLine()));
+        }
+        scanner3.close();
+        
+        try {
+            load();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
             
         section.prefWidthProperty().bind(table.widthProperty().divide(8)); 
         crn.prefWidthProperty().bind(table.widthProperty().divide(12));
@@ -167,10 +179,7 @@ public class controller {
         }
         scanner2.close();
 
-        Scanner scanner3 = new Scanner(new File(controller.class.getResource("colors.txt").toURI()));
-        while(scanner3.hasNextLine()) {
-            colors.add(Color.web(scanner3.nextLine()));
-        }
+        
 
         termBox.getSelectionModel().selectedItemProperty().addListener(e-> {
             courseBox.getSelectionModel().clearSelection();
@@ -287,6 +296,7 @@ public class controller {
             for(int i = 0; i < table.getSelectionModel().getSelectedItem().getDay().length(); i++){
                 SectionRectangle rect = add(table.getSelectionModel().getSelectedItem(), table.getSelectionModel().getSelectedItem().getDay().charAt(i));
                 rect.setFill(colors.get(randomIndex));
+                rect.colorIndex = randomIndex;
                 schedulePane.getChildren().add(rect);
                 scheduledSections.add(rect);
             }
@@ -296,11 +306,18 @@ public class controller {
                 for(int j = 0; j < connectedSection.getDay().length(); j++){
                     SectionRectangle rect = add(connectedSection, connectedSection.getDay().charAt(j));
                     rect.setFill(colors.get(randomIndex));
+                    rect.colorIndex = randomIndex;
                     scheduledSections.add(rect);
                     schedulePane.getChildren().add(rect);
                 }
             }
             table.getSelectionModel().clearSelection(); 
+
+            try {
+                save();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
         });
 
@@ -315,6 +332,11 @@ public class controller {
                 }
             }
             table.getSelectionModel().clearSelection();
+            try {
+                save();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         });
         
 
@@ -420,6 +442,8 @@ public class controller {
         Double[] position = calculatePosition(section, day);
         AnchorPane.setLeftAnchor(rect, position[0]);
         AnchorPane.setTopAnchor(rect, position[1]);
+        rect.setLeftAnchor(position[0]);
+        rect.setTopAnchor(position[1]);
         return rect;
     }
 
@@ -494,5 +518,33 @@ public class controller {
             }
         }
         return conflict;
+    }
+
+    void save() throws Exception{
+        FileOutputStream fos = new FileOutputStream(new File(controller.class.getResource("schedule.ser").toURI()));
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(scheduledSections);
+        oos.close();
+        fos.close();
+    }
+    void load() throws Exception {
+        FileInputStream fis = new FileInputStream(new File(controller.class.getResource("schedule.ser").toURI()));
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        scheduledSections = (ArrayList<SectionRectangle>) ois.readObject();
+        ois.close();
+        fis.close();
+        for(SectionRectangle rect:scheduledSections) {
+            Double[] position = rect.getAnchors();
+            AnchorPane.setLeftAnchor(rect,position[0]);
+            AnchorPane.setTopAnchor(rect, position[1]);
+            rect.setWidth(239);
+            rect.setHeight(calculateHeight(rect.getSection()));
+            try {
+                rect.setFill(colors.get(rect.colorIndex));}
+            catch (IndexOutOfBoundsException ex ) {
+                rect.setFill(colors.get(0));
+            }
+            schedulePane.getChildren().add(rect);
+        }
     }
 }

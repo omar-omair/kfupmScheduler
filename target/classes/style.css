@@ -1,9 +1,11 @@
 .buttonUN {
-    -fx-background-color:#80d4ff
+    -fx-background-color:#80d4ff;
+    -fx-border-color: Black;
+
 }
 
 .buttonUN:pressed {
-    -fx-background-color:#6ab1d4
+    -fx-background-color:#6ab1d4;
 }
 
 #table .table-column {
