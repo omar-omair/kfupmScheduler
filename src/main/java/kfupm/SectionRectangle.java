@@ -23,7 +23,7 @@ public class SectionRectangle extends Rectangle implements Serializable {
         this.beginTimeLabel = beginTime;
         this.endTimeLabel = endTime;
         this.instructorLabel = section.getInstructor();
-        this.sectionLabel = section.getSection() + section.getLoc();
+        this.sectionLabel = section.getSection() + " @" + section.getLoc();
         this.getStyleClass().add("Section_Rectangle");
         this.setStroke(Color.BLACK);
         this.setStrokeWidth(1);
@@ -49,6 +49,9 @@ public class SectionRectangle extends Rectangle implements Serializable {
         return anchors;
     }
     
+    public int hashCode() {
+        return (int) Math.round(this.section.hashCode() * topAnchor * leftAnchor * colorIndex);
+    }
     
 
 }

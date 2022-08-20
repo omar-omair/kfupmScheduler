@@ -12,6 +12,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+
 import java.util.HashMap;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -93,6 +97,7 @@ public class controller {
 
     ArrayList<Color> colors = new ArrayList<Color>();
     ArrayList<SectionRectangle> scheduledSections = new ArrayList<SectionRectangle>();
+    HashMap<SectionRectangle, ArrayList<Label>> labelMap = new HashMap<SectionRectangle, ArrayList<Label>>();
 
     @FXML
     void initialize() throws Exception {
@@ -455,10 +460,32 @@ public class controller {
         rect.setArcHeight(3);
         rect.setHeight(calculateHeight(section));
         Double[] position = calculatePosition(section, day);
+        Label courseLabel = new Label(rect.sectionLabel);
+        Label startLabel = new Label(rect.beginTimeLabel);
+        Label endLabel = new Label(rect.endTimeLabel);
+        Label instructorLabel = new Label(rect.instructorLabel);
+        ArrayList<Label> labels = new ArrayList<Label>();
+        labels.add(courseLabel); labels.add(startLabel); labels.add(endLabel); labels.add(instructorLabel);
+        Font font = Font.font("Aerial", FontWeight.BOLD, FontPosture.REGULAR, 12.0);
+        AnchorPane.setLeftAnchor(courseLabel, position[0] + 14);
+        AnchorPane.setTopAnchor(courseLabel, position[1] + 3);
+        AnchorPane.setLeftAnchor(instructorLabel, position[0] + 14);
+        AnchorPane.setTopAnchor(instructorLabel, position[1]+ 17);
+        AnchorPane.setLeftAnchor(startLabel, position[0] + 205);
+        AnchorPane.setTopAnchor(startLabel, position[1] + 3);
+        AnchorPane.setLeftAnchor(endLabel, position[0] + 205);
+        AnchorPane.setTopAnchor(endLabel, position[1] + 17);
         AnchorPane.setLeftAnchor(rect, position[0]);
         AnchorPane.setTopAnchor(rect, position[1]);
         rect.setLeftAnchor(position[0]);
         rect.setTopAnchor(position[1]);
+        for(Label label: labels) {
+            label.setFont(font);
+            label.setTextFill(Color.WHITE);
+            label.getStyleClass().add("Section_Label");
+            schedulePane.getChildren().add(label);
+        }
+        labelMap.put(rect,labels);
         return rect;
     }
 
