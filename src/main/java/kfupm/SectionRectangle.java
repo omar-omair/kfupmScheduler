@@ -2,6 +2,7 @@ package kfupm;
 
 import java.io.Serializable;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class SectionRectangle extends Rectangle implements Serializable {
@@ -23,6 +24,9 @@ public class SectionRectangle extends Rectangle implements Serializable {
         this.endTimeLabel = endTime;
         this.instructorLabel = section.getInstructor();
         this.sectionLabel = section.getSection() + section.getLoc();
+        this.getStyleClass().add("Section_Rectangle");
+        this.setStroke(Color.BLACK);
+        this.setStrokeWidth(1);
 
     }
 

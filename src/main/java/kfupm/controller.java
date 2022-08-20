@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -85,6 +86,9 @@ public class controller {
     public static ArrayList<Section> currentSections = new ArrayList<Section>();
 
     @FXML
+    private Label conflictLabel;
+
+    @FXML
     private AnchorPane schedulePane;
 
     ArrayList<Color> colors = new ArrayList<Color>();
@@ -112,7 +116,7 @@ public class controller {
             colors.add(Color.web(scanner3.nextLine()));
         }
         scanner3.close();
-        
+
         try {
             load();
         } catch (Exception e1) {
@@ -182,6 +186,7 @@ public class controller {
         
 
         termBox.getSelectionModel().selectedItemProperty().addListener(e-> {
+            conflictLabel.setVisible(false);
             courseBox.getSelectionModel().clearSelection();
             courseBox.setValue(null);
             JSONArray array;
@@ -202,6 +207,7 @@ public class controller {
         });
 
         deptBox.getSelectionModel().selectedItemProperty().addListener(e-> {
+            conflictLabel.setVisible(false);
             courseBox.getSelectionModel().clearSelection();
             courseBox.setValue(null); 
             JSONArray array;
@@ -221,6 +227,8 @@ public class controller {
         });
 
         courseBox.getSelectionModel().selectedItemProperty().addListener(e->{
+            conflictLabel.setVisible(false);
+            table.scrollTo(0);
             String course = courseBox.getSelectionModel().getSelectedItem();
             ArrayList<Section> sections = new ArrayList<Section>(currentSections);
             ArrayList<Section> acceptedSections = new ArrayList<Section>();
@@ -233,6 +241,7 @@ public class controller {
         });
 
         table.getSelectionModel().selectedItemProperty().addListener(e->{
+            conflictLabel.setVisible(false);
             if(table.getSelectionModel().getSelectedItem() != null){
                 addButtonL.setVisible(false);
                 addButtonUN.setVisible(true);
@@ -264,6 +273,7 @@ public class controller {
 
         addButtonUN.setOnAction(e->{
             Boolean conflict = false;
+            conflictLabel.setVisible(false);
             Boolean sectionConflict = checkConflict(table.getSelectionModel().getSelectedItem());
             Section connectedSection = findConnectedSection(table.getSelectionModel().getSelectedItem());
             boolean connectedSectionConflict = false;
@@ -274,24 +284,24 @@ public class controller {
                 conflict = true;
             }
             
-            int randomIndex = (int) (Math.random() * (20));
+            int randomIndex = (int) (Math.random() * (colors.size()));
             if(table.getSelectionModel().getSelectedItem().getDay() != null && !conflict) {
-            for(int i = 0; i< scheduledSections.size(); i++) {
-                if(table.getSelectionModel().getSelectedItem().getSection().contains("LAB")) {
-                    if(table.getSelectionModel().getSelectedItem().getSection().split("-")[0].equals(scheduledSections.get(i).getSection().getSection().split("-")[0]) && scheduledSections.get(i).getSection().getSection().contains("LAB")) {
-                        schedulePane.getChildren().remove(scheduledSections.get(i));
-                        scheduledSections.remove(scheduledSections.get(i));
-                        i--;
+                for(int i = 0; i< scheduledSections.size(); i++) {
+                    if(table.getSelectionModel().getSelectedItem().getSection().contains("LAB")) {
+                        if(table.getSelectionModel().getSelectedItem().getSection().split("-")[0].equals(scheduledSections.get(i).getSection().getSection().split("-")[0]) && scheduledSections.get(i).getSection().getSection().contains("LAB")) {
+                            schedulePane.getChildren().remove(scheduledSections.get(i));
+                            scheduledSections.remove(scheduledSections.get(i));
+                            i--;
+                        }
+                    }
+                    else {
+                        if(table.getSelectionModel().getSelectedItem().getSection().split("-")[0].equals(scheduledSections.get(i).getSection().getSection().split("-")[0]) && !scheduledSections.get(i).getSection().getSection().contains("LAB")) {
+                            schedulePane.getChildren().remove(scheduledSections.get(i));
+                            scheduledSections.remove(scheduledSections.get(i));
+                            i--;
+                        }
                     }
                 }
-                else {
-                    if(table.getSelectionModel().getSelectedItem().getSection().split("-")[0].equals(scheduledSections.get(i).getSection().getSection().split("-")[0]) && !scheduledSections.get(i).getSection().getSection().contains("LAB")) {
-                        schedulePane.getChildren().remove(scheduledSections.get(i));
-                        scheduledSections.remove(scheduledSections.get(i));
-                        i--;
-                    }
-                }
-            }
             
             for(int i = 0; i < table.getSelectionModel().getSelectedItem().getDay().length(); i++){
                 SectionRectangle rect = add(table.getSelectionModel().getSelectedItem(), table.getSelectionModel().getSelectedItem().getDay().charAt(i));
@@ -311,21 +321,26 @@ public class controller {
                     schedulePane.getChildren().add(rect);
                 }
             }
-            table.getSelectionModel().clearSelection(); 
-
+            
+            table.getSelectionModel().clearSelection();
+           
             try {
                 save();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
         }
+            if(conflict) {
+                conflictLabel.setVisible(true);
+            }
+
         });
 
         removeButtonUN.setOnAction(e-> {
             Section connectedSection = findConnectedSection(table.getSelectionModel().getSelectedItem());
             for(int i = 0; i< scheduledSections.size(); i++) {
                 SectionRectangle rect = scheduledSections.get(i);
-                if(rect.getSection().getSection().equals(table.getSelectionModel().getSelectedItem().getSection()) || rect.getSection().getSection().equals(connectedSection.getSection())) {
+                if(rect.getSection().getSection().equals(table.getSelectionModel().getSelectedItem().getSection()) || (connectedSection != null && rect.getSection().getSection().equals(connectedSection.getSection()))) {
                     scheduledSections.remove(rect);
                     schedulePane.getChildren().remove(rect);
                     i--;
@@ -435,7 +450,7 @@ public class controller {
 
     SectionRectangle add(Section section, char day) {
         SectionRectangle rect = new SectionRectangle(section);
-        rect.setWidth(239);
+        rect.setWidth(238);
         rect.setArcWidth(4);
         rect.setArcHeight(3);
         rect.setHeight(calculateHeight(section));
@@ -537,7 +552,12 @@ public class controller {
             Double[] position = rect.getAnchors();
             AnchorPane.setLeftAnchor(rect,position[0]);
             AnchorPane.setTopAnchor(rect, position[1]);
-            rect.setWidth(239);
+            rect.setWidth(238);
+            rect.setArcWidth(4);
+            rect.setArcHeight(3);
+            rect.getStyleClass().add("Section_Rectangle");
+            rect.setStroke(Color.BLACK);
+            rect.setStrokeWidth(1);
             rect.setHeight(calculateHeight(rect.getSection()));
             try {
                 rect.setFill(colors.get(rect.colorIndex));}

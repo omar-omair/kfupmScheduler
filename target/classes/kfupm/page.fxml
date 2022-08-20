@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="810.0" prefWidth="1280.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kfupm.controller">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="810.0" prefWidth="1280.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kfupm.controller">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="464.0" layoutX="42.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" styleClass="square" width="1200.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="48.0" />
       <AnchorPane layoutY="3.0" prefHeight="49.0" prefWidth="1280.0" AnchorPane.bottomAnchor="293.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
@@ -84,7 +84,30 @@
       <Line endX="1099.0" layoutX="141.0" layoutY="467.2" startX="-100.0" stroke="#868282" styleClass="line" AnchorPane.leftAnchor="40.5" AnchorPane.topAnchor="466.7" />
       <Line endX="-31.0" endY="459.0" layoutX="321.0" layoutY="60.0" startX="-31.0" startY="-4.0" stroke="#868282" styleClass="line" AnchorPane.leftAnchor="519.5" AnchorPane.topAnchor="47.0" />
       <Line endX="-31.0" endY="459.0" layoutX="830.0" layoutY="63.0" startX="-31.0" startY="-4.0" stroke="#868282" styleClass="line" AnchorPane.leftAnchor="999.5" AnchorPane.topAnchor="49.0" />
-      <AnchorPane fx:id="schedulePane" layoutX="40.0" layoutY="48.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="1200.0" AnchorPane.bottomAnchor="297.0" AnchorPane.topAnchor="48.0" />
+      <AnchorPane fx:id="schedulePane" layoutX="40.0" layoutY="48.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="1200.0" AnchorPane.bottomAnchor="297.0" AnchorPane.topAnchor="48.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.833" layoutX="165.0" stroke="BLACK" strokeType="INSIDE" width="239.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Label layoutX="14.0" layoutY="3.0" text="CHEM101-01 @23-101" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="205.0" layoutY="3.0" text="1100" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="205.0" layoutY="19.0" text="1150" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="14.0" layoutY="17.0" text="Abdulrahman Alarfaj" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+         </children></AnchorPane>
       <Pane layoutX="7.0" layoutY="509.0" prefHeight="278.0" prefWidth="1244.0">
          <children>
             <TableView fx:id="table" layoutX="32.0" layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="268.0" prefWidth="969.0" styleClass="table">
@@ -112,5 +135,6 @@
       <Button fx:id="removeButtonL" layoutX="564.0" layoutY="784.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="145.0" styleClass="buttonL" text="Remove" />
       <Button fx:id="addButtonUN" layoutX="368.0" layoutY="784.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="145.0" styleClass="buttonUN" text="Add" visible="false" />
       <Button fx:id="removeButtonUN" layoutX="564.0" layoutY="784.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="145.0" styleClass="buttonUN" text="Remove" visible="false" />
+      <Label fx:id="conflictLabel" layoutX="274.0" layoutY="785.0" text="Time Conflict !" textFill="#dd0f0f" visible="false" />
    </children>
 </AnchorPane>
