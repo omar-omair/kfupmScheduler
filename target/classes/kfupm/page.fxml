@@ -50,6 +50,7 @@
             </HBox>
             <Line endX="-31.0" endY="459.0" layoutX="311.0" layoutY="50.0" startX="-31.0" startY="-4.0" stroke="#868282" styleClass="line" AnchorPane.leftAnchor="279.5" AnchorPane.topAnchor="45.0" />
             <Line endX="-31.0" endY="459.0" layoutX="820.0" layoutY="53.0" startX="-31.0" startY="-4.0" stroke="#868282" styleClass="line" AnchorPane.leftAnchor="759.5" AnchorPane.topAnchor="45.0" />
+            <Label layoutX="1174.0" layoutY="85.0" rotate="90.0" styleClass="blackText" text="Made by Omar Alomair with love :)" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="-3.0" layoutY="45.0" prefHeight="440.0" prefWidth="41.0" AnchorPane.bottomAnchor="325.0" AnchorPane.leftAnchor="-3.0" AnchorPane.topAnchor="45.0">
@@ -113,5 +114,6 @@
       <Button fx:id="addButtonUN" layoutX="368.0" layoutY="784.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="145.0" styleClass="buttonUN" text="Add" visible="false" />
       <Button fx:id="removeButtonUN" layoutX="564.0" layoutY="784.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="145.0" styleClass="buttonUN" text="Remove" visible="false" />
       <Label fx:id="conflictLabel" layoutX="274.0" layoutY="785.0" text="Time Conflict !" textFill="#dd0f0f" visible="false" />
+      <Label layoutX="714.0" layoutY="788.0" styleClass="blackText" text="Tip: You can also remove a section by double clicking it." />
    </children>
 </AnchorPane>
