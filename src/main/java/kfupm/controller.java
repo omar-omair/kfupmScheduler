@@ -117,12 +117,13 @@ public class controller {
                 isDark = false;
             }
         });
-
-        Scanner scanner3 = new Scanner(new File(controller.class.getResource("colors.txt").toURI()));
+        InputStream in1 = controller.class.getClassLoader().getResourceAsStream("colors.txt");
+        Scanner scanner3 = new Scanner(in1);
         while(scanner3.hasNextLine()) {
             colors.add(Color.web(scanner3.nextLine()));
         }
         scanner3.close();
+        in1.close();
 
         try {
             load();
@@ -176,19 +177,23 @@ public class controller {
         termBox.setItems(FXCollections.observableArrayList(terms));
 
         ArrayList<String> depts = new ArrayList<String>();
-        Scanner scanner = new Scanner(new File(controller.class.getResource("depts.txt").toURI()));
+        InputStream in2 = controller.class.getClassLoader().getResourceAsStream("depts.txt");
+        Scanner scanner = new Scanner(in2);
         while(scanner.hasNextLine()) {
             depts.add(scanner.nextLine());
         }
        deptBox.setItems(FXCollections.observableArrayList(depts));
        scanner.close();
+       in2.close();
 
        ArrayList<String> deptSymbols = new ArrayList<String>();
-       Scanner scanner2 = new Scanner(new File(controller.class.getResource("deptSymbols.txt").toURI()));
+       InputStream in3 = controller.class.getClassLoader().getResourceAsStream("deptSymbols.txt");
+       Scanner scanner2 = new Scanner(in3);
        while(scanner2.hasNextLine()) {
         deptSymbols.add(scanner2.nextLine());
         }
         scanner2.close();
+        in3.close();
 
         
 
@@ -618,7 +623,8 @@ public class controller {
         fos.close();
     }
     void load() throws Exception {
-        FileInputStream fis = new FileInputStream(new File(controller.class.getResource("schedule.ser").toURI()));
+        //FileInputStream fis = new FileInputStream(new File(controller.class.getResource("schedule.ser").toURI()));
+        InputStream fis = controller.class.getClassLoader().getResourceAsStream("schedule.ser");
         ObjectInputStream ois = new ObjectInputStream(fis);
         scheduledSections = (ArrayList<SectionRectangle>) ois.readObject();
         ois.close();
