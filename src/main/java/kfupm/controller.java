@@ -1,6 +1,7 @@
 package kfupm;
 
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -10,6 +11,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -280,7 +282,7 @@ public class controller {
             Boolean conflict = false;
             conflictLabel.setVisible(false);
             Boolean sectionConflict = checkConflict(table.getSelectionModel().getSelectedItem());
-            Section connectedSection = findConnectedSection(table.getSelectionModel().getSelectedItem());
+            Section connectedSection = findConnectedSection(table.getSelectionModel().getSelectedItem(), true);
             boolean connectedSectionConflict = false;
             if(connectedSection != null) {
                 connectedSectionConflict = checkConflict(connectedSection);
@@ -353,7 +355,7 @@ public class controller {
         });
 
         removeButtonUN.setOnAction(e-> {
-            Section connectedSection = findConnectedSection(table.getSelectionModel().getSelectedItem());
+            Section connectedSection = findConnectedSection(table.getSelectionModel().getSelectedItem(), true);
             for(int i = 0; i< scheduledSections.size(); i++) {
                 SectionRectangle rect = scheduledSections.get(i);
                 if(rect.getSection().getSection().equals(table.getSelectionModel().getSelectedItem().getSection()) || (connectedSection != null && rect.getSection().getSection().equals(connectedSection.getSection()))) {
@@ -374,8 +376,7 @@ public class controller {
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-        });
-        
+        });  
 
     }
 
@@ -507,6 +508,12 @@ public class controller {
             }
         }
         labelMap.put(rect,labels);
+        rect.setOnMouseClicked(e-> {
+            if(e.getClickCount() == 2) {
+                remove(rect.getSection());
+            }
+        });
+        labelMap.put(rect,labels);
         return rect;
     }
 
@@ -530,20 +537,40 @@ public class controller {
         return conflictHours && conflictDays;
     }
 
-    Section findConnectedSection(Section section) {
-        if(section.getSection().contains("(LEC)")) {
-            for(int i=0; i< currentSections.size(); i++) {
-                if(currentSections.get(i).getSection().split(" ")[0].equals(section.getSection().split(" ")[0]) && 
-                currentSections.get(i).getSection().contains("(REC)")) {
-                    return currentSections.get(i);
+    Section findConnectedSection(Section section, boolean check) {
+        if(check){
+            if(section.getSection().contains("(LEC)")) {
+                for(int i=0; i< currentSections.size(); i++) {
+                    if(currentSections.get(i).getSection().split(" ")[0].equals(section.getSection().split(" ")[0]) && 
+                    currentSections.get(i).getSection().contains("(REC)")) {
+                        return currentSections.get(i);
+                    }
+                }
+            }   
+            else if(section.getSection().contains("(REC)")) {
+                for(int i=0; i< currentSections.size(); i++) {
+                    if(currentSections.get(i).getSection().split(" ")[0].equals(section.getSection().split(" ")[0]) && 
+                    currentSections.get(i).getSection().contains("(LEC)")) {
+                        return currentSections.get(i);
+                    }
                 }
             }
-        }   
-        else if(table.getSelectionModel().getSelectedItem().getSection().contains("(REC)")) {
-            for(int i=0; i< currentSections.size(); i++) {
-                if(currentSections.get(i).getSection().split(" ")[0].equals(section.getSection().split(" ")[0]) && 
-                currentSections.get(i).getSection().contains("(LEC)")) {
-                    return currentSections.get(i);
+        }
+        else {
+            if(section.getSection().contains("(LEC)")) {
+                for(int i=0; i< scheduledSections.size(); i++) {
+                    if(scheduledSections.get(i).getSection().getSection().split(" ")[0].equals(section.getSection().split(" ")[0]) && 
+                    scheduledSections.get(i).getSection().getSection().contains("(REC)")) {
+                        return scheduledSections.get(i).getSection();
+                    }
+                }
+            }   
+            else if(section.getSection().contains("(REC)")) {
+                for(int i=0; i< scheduledSections.size(); i++) {
+                    if(scheduledSections.get(i).getSection().getSection().split(" ")[0].equals(section.getSection().split(" ")[0]) && 
+                    scheduledSections.get(i).getSection().getSection().contains("(LEC)")) {
+                        return scheduledSections.get(i).getSection();
+                    }
                 }
             }
         }
@@ -642,6 +669,33 @@ public class controller {
                 }
             }
             labelMap.put(rect,labels);
+            rect.setOnMouseClicked(e-> {
+                if(e.getClickCount() == 2) {
+                    remove(rect.getSection());
+                }
+            });
         }
+    }
+    void remove(Section section) {
+        Section connectedSection = findConnectedSection(section, false);
+            for(int i = 0; i< scheduledSections.size(); i++) {
+                SectionRectangle rect = scheduledSections.get(i);
+                if(rect.getSection().getSection().equals(section.getSection()) || (connectedSection != null && rect.getSection().getSection().equals(connectedSection.getSection()))) {
+                    if(labelMap.get(rect) != null) {
+                        for(int j = 0; j < labelMap.get(rect).size(); j++) {
+                            schedulePane.getChildren().remove(labelMap.get(rect).get(j));
+                        }
+                        
+                        labelMap.remove(rect);}
+                    scheduledSections.remove(rect);
+                    schedulePane.getChildren().remove(rect);
+                    i--;
+                }
+            }
+            try {
+                save();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
     }
 }
