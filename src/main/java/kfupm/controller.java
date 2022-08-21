@@ -613,6 +613,35 @@ public class controller {
                 rect.setFill(colors.get(0));
             }
             schedulePane.getChildren().add(rect);
+
+            Label courseLabel = new Label(rect.sectionLabel);
+            Label startLabel = new Label(rect.beginTimeLabel);
+            Label endLabel = new Label(rect.endTimeLabel);
+            Label instructorLabel = new Label(rect.instructorLabel);
+            ArrayList<Label> labels = new ArrayList<Label>();
+            labels.add(courseLabel); labels.add(startLabel); labels.add(endLabel); labels.add(instructorLabel);
+            Font font = Font.font("Aerial", FontWeight.BOLD, FontPosture.REGULAR, 12.0);
+            Font font2 = Font.font("Aerial", FontWeight.BOLD, FontPosture.REGULAR, 8.0);
+            AnchorPane.setLeftAnchor(courseLabel, position[0] + 14);
+            AnchorPane.setTopAnchor(courseLabel, position[1] + 3);
+            AnchorPane.setLeftAnchor(instructorLabel, position[0] + 14);
+            AnchorPane.setTopAnchor(instructorLabel, position[1]+ 17);
+            AnchorPane.setLeftAnchor(startLabel, position[0] + 205);
+            AnchorPane.setTopAnchor(startLabel, position[1] + 3);
+            AnchorPane.setLeftAnchor(endLabel, position[0] + 205);
+            AnchorPane.setTopAnchor(endLabel, position[1] + 17);
+            AnchorPane.setLeftAnchor(rect, position[0]);
+            AnchorPane.setTopAnchor(rect, position[1]);
+            for(Label label: labels) {
+                label.setFont(font);
+                label.setTextFill(Color.WHITE);
+                label.getStyleClass().add("Section_Label");
+                schedulePane.getChildren().add(label);
+                if(label.getText().length() > 27) {
+                    label.setFont(font2);
+                }
+            }
+            labelMap.put(rect,labels);
         }
     }
 }
