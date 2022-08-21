@@ -294,6 +294,11 @@ public class controller {
                 for(int i = 0; i< scheduledSections.size(); i++) {
                     if(table.getSelectionModel().getSelectedItem().getSection().contains("LAB")) {
                         if(table.getSelectionModel().getSelectedItem().getSection().split("-")[0].equals(scheduledSections.get(i).getSection().getSection().split("-")[0]) && scheduledSections.get(i).getSection().getSection().contains("LAB")) {
+                            if(labelMap.get(scheduledSections.get(i)) != null) { 
+                                for(int j = 0; j < labelMap.get(scheduledSections.get(i)).size(); j++) {
+                                    schedulePane.getChildren().remove(labelMap.get(scheduledSections.get(i)).get(j));
+                                }
+                                labelMap.remove(scheduledSections.get(i));}
                             schedulePane.getChildren().remove(scheduledSections.get(i));
                             scheduledSections.remove(scheduledSections.get(i));
                             i--;
@@ -301,6 +306,12 @@ public class controller {
                     }
                     else {
                         if(table.getSelectionModel().getSelectedItem().getSection().split("-")[0].equals(scheduledSections.get(i).getSection().getSection().split("-")[0]) && !scheduledSections.get(i).getSection().getSection().contains("LAB")) {
+                            if(labelMap.get(scheduledSections.get(i)) != null) { 
+                                for(int j = 0; j < labelMap.get(scheduledSections.get(i)).size(); j++) {
+                                    schedulePane.getChildren().remove(labelMap.get(scheduledSections.get(i)).get(j));
+                                }
+                                labelMap.remove(scheduledSections.get(i));}
+
                             schedulePane.getChildren().remove(scheduledSections.get(i));
                             scheduledSections.remove(scheduledSections.get(i));
                             i--;
@@ -346,6 +357,12 @@ public class controller {
             for(int i = 0; i< scheduledSections.size(); i++) {
                 SectionRectangle rect = scheduledSections.get(i);
                 if(rect.getSection().getSection().equals(table.getSelectionModel().getSelectedItem().getSection()) || (connectedSection != null && rect.getSection().getSection().equals(connectedSection.getSection()))) {
+                    if(labelMap.get(rect) != null) {
+                        for(int j = 0; j < labelMap.get(rect).size(); j++) {
+                            schedulePane.getChildren().remove(labelMap.get(rect).get(j));
+                        }
+                        
+                        labelMap.remove(rect);}
                     scheduledSections.remove(rect);
                     schedulePane.getChildren().remove(rect);
                     i--;
@@ -467,6 +484,7 @@ public class controller {
         ArrayList<Label> labels = new ArrayList<Label>();
         labels.add(courseLabel); labels.add(startLabel); labels.add(endLabel); labels.add(instructorLabel);
         Font font = Font.font("Aerial", FontWeight.BOLD, FontPosture.REGULAR, 12.0);
+        Font font2 = Font.font("Aerial", FontWeight.BOLD, FontPosture.REGULAR, 8.0);
         AnchorPane.setLeftAnchor(courseLabel, position[0] + 14);
         AnchorPane.setTopAnchor(courseLabel, position[1] + 3);
         AnchorPane.setLeftAnchor(instructorLabel, position[0] + 14);
@@ -484,6 +502,9 @@ public class controller {
             label.setTextFill(Color.WHITE);
             label.getStyleClass().add("Section_Label");
             schedulePane.getChildren().add(label);
+            if(label.getText().length() > 27) {
+                label.setFont(font2);
+            }
         }
         labelMap.put(rect,labels);
         return rect;

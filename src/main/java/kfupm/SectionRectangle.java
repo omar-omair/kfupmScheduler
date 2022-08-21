@@ -49,9 +49,5 @@ public class SectionRectangle extends Rectangle implements Serializable {
         return anchors;
     }
     
-    public int hashCode() {
-        return (int) Math.round(this.section.hashCode() * topAnchor * leftAnchor * colorIndex);
-    }
-    
 
 }
