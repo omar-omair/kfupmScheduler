@@ -21,6 +21,7 @@ import javafx.scene.text.FontWeight;
 import java.util.HashMap;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Scanner;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -616,7 +617,9 @@ public class controller {
     }
 
     void save() throws Exception{
-        FileOutputStream fos = new FileOutputStream(new File(controller.class.getResource("schedule.ser").toURI()));
+        String path = controller.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        String decodedPath = URLDecoder.decode(path, "UTF-8");
+        FileOutputStream fos = new FileOutputStream(new File( decodedPath + ".ser"));
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(scheduledSections);
         oos.close();
@@ -624,7 +627,9 @@ public class controller {
     }
     void load() throws Exception {
         //FileInputStream fis = new FileInputStream(new File(controller.class.getResource("schedule.ser").toURI()));
-        InputStream fis = controller.class.getClassLoader().getResourceAsStream("schedule.ser");
+        String path = controller.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        String decodedPath = URLDecoder.decode(path, "UTF-8");
+        FileInputStream fis = new FileInputStream(new File(decodedPath + ".ser"));
         ObjectInputStream ois = new ObjectInputStream(fis);
         scheduledSections = (ArrayList<SectionRectangle>) ois.readObject();
         ois.close();

@@ -16,7 +16,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setTitle(" KFUPM scheduler");
         stage.sizeToScene();
-        //stage.getIcons().add(new Image(App.class.getResourceAsStream("icon.png")));
+        stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("icon.png")));
         stage.show();
     }
     
